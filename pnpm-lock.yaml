@@ -14,6 +14,9 @@ importers:
       '@hono/zod-openapi':
         specifier: ^1.5.1
         version: 1.5.1(hono@4.12.30)(zod@4.4.3)
+      '@scalar/hono-api-reference':
+        specifier: ^0.11.10
+        version: 0.11.10(hono@4.12.30)
       dotenv:
         specifier: ^17.4.2
         version: 17.4.2
@@ -222,6 +225,32 @@ packages:
       hono: '>=4.11.2'
       zod: ^3.25.0 || ^4.0.0
 
+  '@scalar/client-side-rendering@0.3.3':
+    resolution: {integrity: sha512-QMTKZdwtSSV619jV1jKeRCOd358cgJqRBTHQ663CF7EUCZ354qH4js883K3RYg5/eO4oWxOuka308KIj0sZ/Kg==}
+    engines: {node: '>=22'}
+
+  '@scalar/helpers@0.9.1':
+    resolution: {integrity: sha512-UKSLIPfN++f+zzbsZ+F6I0lNrR4yX4PtokjHgGwGiHapxT5VJqAF4zFTIP2KCd27XG7KnAIA7qq62O4xRBxc6w==}
+    engines: {node: '>=22'}
+
+  '@scalar/hono-api-reference@0.11.10':
+    resolution: {integrity: sha512-LluYDOie3F8NqLiAuZ0ESWmtWotSMV9A2/AxIB3NwQk/3JJ+5S9rnIWVY61o7QIDWlwwy6uZ8KqRSV83qmnhZA==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      hono: ^4.12.5
+
+  '@scalar/schemas@0.7.3':
+    resolution: {integrity: sha512-B6S/zUptiRfMsmMy92u/LefpULus1h0q3od9l5xgZc+pslkfFhfFns+QsU0UJX3Lqp3tTsf64c3tIRqH7cZgVA==}
+    engines: {node: '>=22'}
+
+  '@scalar/types@0.16.3':
+    resolution: {integrity: sha512-8TVNlK8AdvIekrapAoEVwy+IVRbMTSDYnpprskAJV4XanmZ52Kru6RmS6d+tbEBfMo2dTgQ9cV9P0kqsAu/AuA==}
+    engines: {node: '>=22'}
+
+  '@scalar/validation@0.6.1':
+    resolution: {integrity: sha512-XeJ+pvxag0rguuRT6hxNSXIsxleB8Gcs6WQ55vFRkB4qo2CCO+wIli+uipzM3pILu5cP7agcL3pgADiZzd1ZNg==}
+    engines: {node: '>=20'}
+
   '@types/node@26.1.1':
     resolution: {integrity: sha512-nxAkRSVkN1Y0JC1W8ky/fTfkGsMmcrRsbx+3XoZE+rMOX71kLYTV7fLXpqud1GpbpP5TuffXFqfX7fH2GgZREw==}
 
@@ -367,6 +396,11 @@ packages:
     resolution: {integrity: sha512-emn+JoJjrN9YTpRDS5it/UI2SO9BAE37T6I3d963RxcZ81G9A4pr2SZTEiiaiKbzx+NKRg5BZ89fCL7gCJCUog==}
     engines: {node: '>=16.9.0'}
 
+  nanoid@5.1.16:
+    resolution: {integrity: sha512-kVrnsrJqMR8+oLJnGEmSWw9BivK5mt7H3FZatVRjrc5wGqFYuBxX1yG7+A7Gi5AefkX6t/oCkizcQgpu0cY1dQ==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+
   openapi3-ts@4.6.0:
     resolution: {integrity: sha512-a4sfn6L2sIShhtzJqmjGrARvxAW/3F2BJDdyRVvNF9VhAsZSh5hSyI3a9TNvmzBxXmq66nY5LNT5bQcBxYAZZg==}
 
@@ -385,10 +419,18 @@ packages:
       openapi3-ts:
         optional: true
 
+  tagged-tag@1.0.0:
+    resolution: {integrity: sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng==}
+    engines: {node: '>=20'}
+
   tsx@4.23.1:
     resolution: {integrity: sha512-GQHnkIfxyx1wYCOS/wonik5MVRZU9hi1TEZmzGZSCJB1y9YgoZ8H6itNE/u4suE+yLmOzuE4E5S4TZ/ZX2wcWQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
+
+  type-fest@5.8.0:
+    resolution: {integrity: sha512-YGYEVz3Fm5iy/AybuA0oyNFq7H4CgQNfRp/qfe8nurE1kuCeNm3/vfm9X4Mtl+qLyaKJUh5xrFZwogr41SMjYA==}
+    engines: {node: '>=20'}
 
   typescript@7.0.2:
     resolution: {integrity: sha512-8FYau96o3NKOhbjKi/qNvG/W5jhzxkbdm5sj9AbZ/5T5sWqn3hJgLfGx27sRKZWTvyzCP8dLRBTf5tBTSRVUNA==}
@@ -508,6 +550,33 @@ snapshots:
       hono: 4.12.30
       zod: 4.4.3
 
+  '@scalar/client-side-rendering@0.3.3':
+    dependencies:
+      '@scalar/schemas': 0.7.3
+      '@scalar/types': 0.16.3
+      '@scalar/validation': 0.6.1
+
+  '@scalar/helpers@0.9.1': {}
+
+  '@scalar/hono-api-reference@0.11.10(hono@4.12.30)':
+    dependencies:
+      '@scalar/client-side-rendering': 0.3.3
+      hono: 4.12.30
+
+  '@scalar/schemas@0.7.3':
+    dependencies:
+      '@scalar/helpers': 0.9.1
+      '@scalar/validation': 0.6.1
+
+  '@scalar/types@0.16.3':
+    dependencies:
+      '@scalar/helpers': 0.9.1
+      nanoid: 5.1.16
+      type-fest: 5.8.0
+      zod: 4.4.3
+
+  '@scalar/validation@0.6.1': {}
+
   '@types/node@26.1.1':
     dependencies:
       undici-types: 8.3.0
@@ -612,6 +681,8 @@ snapshots:
 
   hono@4.12.30: {}
 
+  nanoid@5.1.16: {}
+
   openapi3-ts@4.6.0:
     dependencies:
       yaml: 2.9.0
@@ -624,11 +695,17 @@ snapshots:
       '@hono/zod-openapi': 1.5.1(hono@4.12.30)(zod@4.4.3)
       openapi3-ts: 4.6.0
 
+  tagged-tag@1.0.0: {}
+
   tsx@4.23.1:
     dependencies:
       esbuild: 0.28.1
     optionalDependencies:
       fsevents: 2.3.3
+
+  type-fest@5.8.0:
+    dependencies:
+      tagged-tag: 1.0.0
 
   typescript@7.0.2:
     optionalDependencies:
