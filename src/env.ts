@@ -5,7 +5,8 @@ import { expand } from "dotenv-expand"
 expand(config())
 
 const envSchema = z.object({
-    PORT: z.coerce.number().positive().default(3000)
+    PORT: z.coerce.number().positive().default(3000),
+    LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace"]).default("info")
 })
 
 const parsed = envSchema.safeParse(process.env);
