@@ -1,4 +1,5 @@
 import { pgTable, timestamp, uuid, text } from "drizzle-orm/pg-core"
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-orm/zod"
 
 export const categories = pgTable("categories", {
     id: uuid().primaryKey().defaultRandom(),
@@ -6,3 +7,7 @@ export const categories = pgTable("categories", {
     createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp({ withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date())
 })
+
+export const selectCategorySchema = createSelectSchema(categories)
+export const insertCategorySchema = createInsertSchema(categories)
+export const updateCategorySchema = createUpdateSchema(categories)
