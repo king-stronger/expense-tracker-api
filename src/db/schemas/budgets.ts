@@ -1,5 +1,6 @@
 import { categories } from "./categories.js"
 import { pgTable, timestamp, uuid, integer } from "drizzle-orm/pg-core"
+import { createSelectSchema, createInsertSchema, createUpdateSchema } from "drizzle-orm/zod"
 
 export const budgets = pgTable("budgets", {
     id: uuid().primaryKey().defaultRandom(),
@@ -10,3 +11,17 @@ export const budgets = pgTable("budgets", {
     createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp({ withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date())
 })
+
+export const selectBudgetsSchema = createSelectSchema(budgets)
+export const insertBudgetsSchema = createInsertSchema(budgets)
+    .omit({
+        id: true,
+        createdAt: true,
+        updatedAt: true
+    })
+export const updateBudgetsSchema = createUpdateSchema(budgets)
+    .omit({
+        id: true,
+        createdAt: true,
+        updatedAt: true
+    })

@@ -1,20 +1,20 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import * as HttpStatusCodes from "stoker/http-status-codes"
 import * as HttpStatusPhrases from "stoker/http-status-phrases"
-import { jsonContent, jsonContentOneOf, jsonContentRequired } from "stoker/openapi/helpers";
-import { selectCategorySchema, insertCategorySchema, updateCategorySchema } from "@/db/schemas.js";
+import { jsonContent, jsonContentOneOf } from "stoker/openapi/helpers";
+import { insertBudgetsSchema, selectBudgetsSchema, updateBudgetsSchema } from "@/db/schemas.js";
 import { createErrorSchema, createMessageObjectSchema, IdUUIDParamsSchema } from "stoker/openapi/schemas";
 
-const tags = ["Categories"]
+const tags = ["Budgets"]
 
 export const list = createRoute({
     tags,
     method: "get",
-    path: "/categories",
+    path: "/budgets",
     responses: {
         [HttpStatusCodes.OK]: jsonContent(
-            z.array(selectCategorySchema),
-            "The list of categories"
+            z.array(selectBudgetsSchema),
+            "The list of budgets"
         )
     }
 })
@@ -22,21 +22,21 @@ export const list = createRoute({
 export const create = createRoute({
     tags,
     method: "post",
-    path: "/categories",
+    path: "/budgets",
     request: {
-        body: jsonContentRequired(
-            insertCategorySchema,
-            "The category to create"
+        body: jsonContent(
+            insertBudgetsSchema,
+            "The budget to create"
         )
     },
     responses: {
         [HttpStatusCodes.OK]: jsonContent(
-            selectCategorySchema,
-            "The category created"
+            selectBudgetsSchema,
+            "The budget has been created"
         ),
         [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-            createErrorSchema(insertCategorySchema),
-            "The validation(s) error(s)"
+            createErrorSchema(insertBudgetsSchema),
+            "Validation(s) error(s)"
         )
     }
 })
@@ -44,27 +44,27 @@ export const create = createRoute({
 export const update = createRoute({
     tags,
     method: "put",
-    path: "/categories/{id}",
+    path: "/budgets",
     request: {
         params: IdUUIDParamsSchema,
         body: jsonContent(
-            updateCategorySchema,
-            "The category to update"
+            updateBudgetsSchema,
+            "The transaction to update"
         )
     },
     responses: {
         [HttpStatusCodes.OK]: jsonContent(
-            selectCategorySchema,
-            "The category updated"
+            selectBudgetsSchema,
+            "The budget has been updated"
         ),
         [HttpStatusCodes.NOT_FOUND]: jsonContent(
             createMessageObjectSchema(HttpStatusPhrases.NOT_FOUND),
-            "Category not found"
+            "Budget not found"
         ),
         [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContentOneOf(
             [
                 createErrorSchema(IdUUIDParamsSchema),
-                createErrorSchema(updateCategorySchema)
+                createErrorSchema(updateBudgetsSchema)
             ],
             "Invalid ID or validation(s) error(s)"
         )
@@ -74,21 +74,17 @@ export const update = createRoute({
 export const remove = createRoute({
     tags,
     method: "delete",
-    path: "/categories/{id}",
+    path: "/budgets",
     request: {
         params: IdUUIDParamsSchema
     },
     responses: {
         [HttpStatusCodes.NO_CONTENT]: {
-            description: "Category deleted"
+            description: "Budget has been deleted"
         },
         [HttpStatusCodes.NOT_FOUND]: jsonContent(
             createMessageObjectSchema(HttpStatusPhrases.NOT_FOUND),
-            "Category not found"
-        ),
-        [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-            createErrorSchema(IdUUIDParamsSchema),
-            "Invalid ID"
+            "Budget not found"
         )
     }
 })
