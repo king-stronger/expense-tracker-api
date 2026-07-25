@@ -1,6 +1,6 @@
 import { categories } from "./categories.js"
 import { pgTable, timestamp, uuid, text, integer, pgEnum } from "drizzle-orm/pg-core"
-import { createSelectSchema, createInsertSchema, createUpdateSchema } from "drizzle-orm/zod"
+import { createSelectSchema, createInsertSchema, createUpdateSchema } from "drizzle-zod"
 
 export const transactionTypeEnum = pgEnum("transaction_type", [
     "income",

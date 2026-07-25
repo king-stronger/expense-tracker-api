@@ -1,30 +1,23 @@
-import {
-    categories,
-    transactions,
-    budgets,
-} from "@/db/schemas.js";
+import { relations } from "drizzle-orm";
+import { budgets } from "@/db/schemas/budgets.js";
+import { categories } from "@/db/schemas/categories.js";
+import { transactions } from "@/db/schemas/transactions.js";
 
-import { defineRelations } from "drizzle-orm"
+export const categoriesRelations = relations(categories, ({ many }) => ({
+    transactions: many(transactions),
+    budgets: many(budgets),
+}));
 
-export const relations = defineRelations({
-        categories,
-        transactions,
-        budgets,
-    }, (r) => ({
-    categories: {
-        transactions: r.many.transactions(),
-        budgets: r.many.budgets()
-    },
-    transactions: {
-        category: r.one.categories({
-            from: r.transactions.categoryId,
-            to: r.categories.id
-        })
-    },
-    budgets: {
-        category: r.one.categories({
-            from: r.budgets.categoryId,
-            to: r.categories.id
-        })
-    }
-}))
+export const transactionsRelations = relations(transactions, ({ one }) => ({
+    category: one(categories, {
+        fields: [transactions.categoryId],
+        references: [categories.id],
+    })
+}));
+
+export const budgetsRelations = relations(budgets, ({ one }) => ({
+    category: one(categories, {
+        fields: [budgets.categoryId],
+        references: [categories.id],
+    })
+}));

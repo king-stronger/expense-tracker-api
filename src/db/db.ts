@@ -1,9 +1,9 @@
 import { env } from "@/env.js"
-import { relations } from "@/db/relations.js"
+import * as schema from "@/db/schemas.js"
 import { drizzle } from "drizzle-orm/node-postgres"
 
 export const db = drizzle({
-    relations,
+    schema,
     connection: {
         port: env.DB_PORT,
         host: env.DB_HOST,

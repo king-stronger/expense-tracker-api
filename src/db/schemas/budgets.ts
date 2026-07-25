@@ -1,6 +1,6 @@
 import { categories } from "./categories.js"
 import { pgTable, timestamp, uuid, integer } from "drizzle-orm/pg-core"
-import { createSelectSchema, createInsertSchema, createUpdateSchema } from "drizzle-orm/zod"
+import { createSelectSchema, createInsertSchema, createUpdateSchema } from "drizzle-zod"
 
 export const budgets = pgTable("budgets", {
     id: uuid().primaryKey().defaultRandom(),

@@ -1,5 +1,5 @@
 import { pgTable, timestamp, uuid, text } from "drizzle-orm/pg-core"
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-orm/zod"
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod"
 
 export const categories = pgTable("categories", {
     id: uuid().primaryKey().defaultRandom(),
