@@ -1,7 +1,8 @@
 import index from "@/routes/index.js"
 import { auth } from "@/lib/auth.js";
 import { createApp } from "@/lib/create-app.js";
-import { configureOpenApi } from "./lib/configure-open-api.js";
+import { authMiddleware } from "@/middlewares/auth.js";
+import { configureOpenApi } from "@/lib/configure-open-api.js";
 
 import budgets from "@/routes/budgets/budgets.index.js"
 import categories from "@/routes/categories/categories.index.js"
@@ -18,9 +19,11 @@ const routes = [
 
 configureOpenApi(app);
 
-app.on(["GET", "POST"], "/auth/*", (c) => {
+app.on(["GET", "POST"], "/api/auth/*", (c) => {
 	return auth.handler(c.req.raw);
 });
+
+app.use("*", authMiddleware)
 
 routes.forEach(route => app.route("/", route))
 
