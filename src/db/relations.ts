@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm";
-import { budgets } from "./schemas/budgets.js";
-import { categories } from "./schemas/categories.js";
-import { transactions } from "./schemas/transactions.js";
+import { budgets } from "@/schemas/budgets.js";
+import { categories } from "@/schemas/categories.js";
+import { transactions } from "@/schemas/transactions.js";
 
 export const categoriesRelations = relations(categories, ({ many }) => ({
     transactions: many(transactions),
