@@ -15,6 +15,13 @@
       "when": 1785072254271,
       "tag": "0001_watery_pride",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1785083398686,
+      "tag": "0002_slippery_colossus",
+      "breakpoints": true
     }
   ]
 }

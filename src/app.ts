@@ -1,8 +1,8 @@
 import index from "@/routes/index.js"
 import { auth } from "@/lib/auth.js";
 import { createApp } from "@/lib/create-app.js";
-import { authMiddleware } from "@/middlewares/auth.js";
 import { configureOpenApi } from "@/lib/configure-open-api.js";
+import { authMiddleware, requireAuth } from "@/middlewares/auth.js";
 
 import budgets from "@/routes/budgets/budgets.index.js"
 import categories from "@/routes/categories/categories.index.js"
@@ -24,6 +24,7 @@ app.on(["GET", "POST"], "/api/auth/*", (c) => {
 });
 
 app.use("*", authMiddleware)
+app.use("*", requireAuth)
 
 routes.forEach(route => app.route("/", route))
 

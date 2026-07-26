@@ -15,7 +15,7 @@ export const transactions = pgTable("transactions", {
     description: text(),
     amount: integer().notNull(),
     transactionDate: timestamp({ withTimezone: true }).notNull().defaultNow(),
-    userId: uuid().notNull().references(() => user.id),
+    userId: text().notNull().references(() => user.id),
     createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp({ withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date())
 })

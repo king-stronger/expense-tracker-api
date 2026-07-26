@@ -15,6 +15,10 @@ export const list = createRoute({
         [HttpStatusCodes.OK]: jsonContent(
             z.array(selectTransactionsSchema),
             "The list of transactions"
+        ),
+        [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+            createMessageObjectSchema(HttpStatusPhrases.UNAUTHORIZED),
+            "User not authentified"
         )
     }
 })
@@ -37,6 +41,10 @@ export const create = createRoute({
         [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
             createErrorSchema(insertTransactionsSchema),
             "The transaction has been created"
+        ),
+        [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+            createMessageObjectSchema(HttpStatusPhrases.UNAUTHORIZED),
+            "User not authentified"
         )
     }
 })
@@ -67,6 +75,10 @@ export const update = createRoute({
                 createErrorSchema(IdUUIDParamsSchema)
             ],
             "Invalid ID or validation(s) error(s)"
+        ),
+        [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+            createMessageObjectSchema(HttpStatusPhrases.UNAUTHORIZED),
+            "User not authentified"
         )
     }
 })
@@ -85,6 +97,10 @@ export const remove = createRoute({
         [HttpStatusCodes.NOT_FOUND]: jsonContent(
             createMessageObjectSchema(HttpStatusPhrases.NOT_FOUND),
             "Transaction not found"
+        ),
+        [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+            createMessageObjectSchema(HttpStatusPhrases.UNAUTHORIZED),
+            "User not authentified"
         )
     }
 })

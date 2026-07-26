@@ -1,6 +1,6 @@
 import { user } from "@/db/schemas/auth.js"
 import { categories } from "@/db/schemas/categories.js"
-import { pgTable, timestamp, uuid, integer } from "drizzle-orm/pg-core"
+import { pgTable, timestamp, uuid, text, integer } from "drizzle-orm/pg-core"
 import { createSelectSchema, createInsertSchema, createUpdateSchema } from "drizzle-zod"
 
 export const budgets = pgTable("budgets", {
@@ -9,7 +9,7 @@ export const budgets = pgTable("budgets", {
     amount: integer().notNull(),
     month: integer().notNull(),
     year: integer().notNull(),
-    userId: uuid().notNull().references(() => user.id),
+    userId: text().notNull().references(() => user.id),
     createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp({ withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date())
 })

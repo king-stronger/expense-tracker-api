@@ -1,5 +1,5 @@
 import { db } from "@/db/db.js"
-import { eq } from "drizzle-orm"
+import { eq, and } from "drizzle-orm"
 import { budgets } from "@/db/schemas.js"
 import type { AppRouteHandler } from "@/lib/types.js"
 import * as HttpStatusCodes from "stoker/http-status-codes"
@@ -7,28 +7,44 @@ import * as HttpStatusPhrases from "stoker/http-status-phrases"
 import type { ListRoute, CreateRoute, UpdateRoute, RemoveRoute } from "@/routes/budgets/budgets.routes.js"
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
-    const budgets = await db.query.budgets.findMany()
-    return c.json(budgets, HttpStatusCodes.OK)
+    const user = c.get("user")!
+    
+    const results = await db.query.budgets.findMany({
+        where: eq(budgets.userId, user.id)
+    })
+    return c.json(results, HttpStatusCodes.OK)
 }
 
 export const create: AppRouteHandler<CreateRoute> = async (c) => {
+    const user = c.get("user")!
+    
     const data = c.req.valid("json")
     const [budget] = await db
         .insert(budgets)
-        .values(data)
+        .values({
+            ...data,
+            userId: user.id
+        })
         .returning()
 
     return c.json(budget, HttpStatusCodes.OK)
 }
 
 export const update: AppRouteHandler<UpdateRoute> = async (c) => {
+    const user = c.get("user")!
+    
     const { id } = c.req.valid("param")
     const data = c.req.valid("json")
 
     const [budget] = await db
         .update(budgets)
         .set(data)
-        .where(eq(budgets.id, id))
+        .where(
+            and(
+                eq(budgets.id, id),
+                eq(budgets.userId, user.id)
+            )
+        )
         .returning()
 
     if(!budget){
@@ -44,10 +60,17 @@ export const update: AppRouteHandler<UpdateRoute> = async (c) => {
 }
 
 export const remove: AppRouteHandler<RemoveRoute> = async (c) => {
+    const user = c.get("user")!
+    
     const { id } = c.req.valid("param")
     const result = await db
         .delete(budgets)
-        .where(eq(budgets.id, id))
+        .where(
+            and(
+                eq(budgets.id, id),
+                eq(budgets.userId, user.id)
+            )
+        )
 
     if(result.rowCount === 0){
         return c.json(

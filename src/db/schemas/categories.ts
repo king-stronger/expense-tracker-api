@@ -5,7 +5,7 @@ import { createInsertSchema, createSelectSchema, createUpdateSchema } from "driz
 export const categories = pgTable("categories", {
     id: uuid().primaryKey().defaultRandom(),
     name: text().notNull(),
-    userId: uuid().notNull().references(() => user.id),
+    userId: text().notNull().references(() => user.id),
     createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp({ withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date())
 })
@@ -13,9 +13,15 @@ export const categories = pgTable("categories", {
 export const selectCategorySchema = createSelectSchema(categories)
 export const insertCategorySchema = createInsertSchema(categories)
     .omit({
-        userId: true
+        id: true,
+        userId: true,
+        createdAt: true,
+        updatedAt: true,
     })
 export const updateCategorySchema = createUpdateSchema(categories)
     .omit({
-        userId: true
+        id: true,
+        userId: true,
+        createdAt: true,
+        updatedAt: true,
     })
