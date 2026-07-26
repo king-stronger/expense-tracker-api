@@ -1,5 +1,5 @@
-
 import index from "@/routes/index.js"
+import { auth } from "@/lib/auth.js";
 import { createApp } from "@/lib/create-app.js";
 import { configureOpenApi } from "./lib/configure-open-api.js";
 
@@ -17,6 +17,10 @@ const routes = [
 ]
 
 configureOpenApi(app);
+
+app.on(["GET", "POST"], "/auth/*", (c) => {
+	return auth.handler(c.req.raw);
+});
 
 routes.forEach(route => app.route("/", route))
 
