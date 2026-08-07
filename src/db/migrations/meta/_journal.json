@@ -1,27 +1,13 @@
 {
-	"version": "7",
-	"dialect": "postgresql",
-	"entries": [
-		{
-			"idx": 0,
-			"version": "7",
-			"when": 1785017115264,
-			"tag": "0000_yummy_cargill",
-			"breakpoints": true
-		},
-		{
-			"idx": 1,
-			"version": "7",
-			"when": 1785072254271,
-			"tag": "0001_watery_pride",
-			"breakpoints": true
-		},
-		{
-			"idx": 2,
-			"version": "7",
-			"when": 1785083398686,
-			"tag": "0002_slippery_colossus",
-			"breakpoints": true
-		}
-	]
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1786117030056,
+      "tag": "0000_wild_dust",
+      "breakpoints": true
+    }
+  ]
 }
