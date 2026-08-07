@@ -16,6 +16,7 @@ import {
 	selectCategorySchema,
 	updateCategorySchema,
 } from "@/db/schemas.js";
+import { COOKIE_AUTH } from "@/lib/helper.js";
 
 const tags = ["Categories"];
 
@@ -23,6 +24,7 @@ export const list = createRoute({
 	tags,
 	method: "get",
 	path: "/categories",
+	security: COOKIE_AUTH,
 	responses: {
 		[HttpStatusCodes.OK]: jsonContent(
 			z.array(selectCategorySchema),
@@ -39,6 +41,7 @@ export const create = createRoute({
 	tags,
 	method: "post",
 	path: "/categories",
+	security: COOKIE_AUTH,
 	request: {
 		body: jsonContentRequired(insertCategorySchema, "The category to create"),
 	},
@@ -62,6 +65,7 @@ export const update = createRoute({
 	tags,
 	method: "put",
 	path: "/categories/{id}",
+	security: COOKIE_AUTH,
 	request: {
 		params: IdUUIDParamsSchema,
 		body: jsonContent(updateCategorySchema, "The category to update"),
@@ -93,6 +97,7 @@ export const remove = createRoute({
 	tags,
 	method: "delete",
 	path: "/categories/{id}",
+	security: COOKIE_AUTH,
 	request: {
 		params: IdUUIDParamsSchema,
 	},

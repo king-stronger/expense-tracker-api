@@ -12,6 +12,7 @@ import {
 	selectTransactionsSchema,
 	updateTransactionsSchema,
 } from "@/db/schemas.js";
+import { COOKIE_AUTH } from "@/lib/helper.js";
 
 const tags = ["Transactions"];
 
@@ -19,6 +20,7 @@ export const list = createRoute({
 	tags,
 	method: "get",
 	path: "/transactions",
+	security: COOKIE_AUTH,
 	responses: {
 		[HttpStatusCodes.OK]: jsonContent(
 			z.array(selectTransactionsSchema),
@@ -35,6 +37,7 @@ export const create = createRoute({
 	tags,
 	method: "post",
 	path: "/transactions",
+	security: COOKIE_AUTH,
 	request: {
 		body: jsonContent(insertTransactionsSchema, "The transaction to insert"),
 	},
@@ -58,6 +61,7 @@ export const update = createRoute({
 	tags,
 	method: "put",
 	path: "/transactions/{id}",
+	security: COOKIE_AUTH,
 	request: {
 		params: IdUUIDParamsSchema,
 		body: jsonContent(updateTransactionsSchema, "The transaction to update"),
@@ -89,6 +93,7 @@ export const remove = createRoute({
 	tags,
 	method: "delete",
 	path: "/transactions/{id}",
+	security: COOKIE_AUTH,
 	request: {
 		params: IdUUIDParamsSchema,
 	},

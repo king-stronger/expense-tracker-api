@@ -21,8 +21,6 @@ export const authMiddleware = async (c: Context<AppBindings>, next: Next) => {
 
 export const requireAuth = async (c: Context<AppBindings>, next: Next) => {
 	const user = c.get("user");
-	console.log("bisou");
-	console.log(user);
 
 	if (!user) {
 		return c.json(

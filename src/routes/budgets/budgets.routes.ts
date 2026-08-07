@@ -12,6 +12,8 @@ import {
 	selectBudgetsSchema,
 	updateBudgetsSchema,
 } from "@/db/schemas.js";
+import { COOKIE_AUTH } from "@/lib/helper.js";
+
 
 const tags = ["Budgets"];
 
@@ -19,6 +21,7 @@ export const list = createRoute({
 	tags,
 	method: "get",
 	path: "/budgets",
+	security: COOKIE_AUTH,
 	responses: {
 		[HttpStatusCodes.OK]: jsonContent(
 			z.array(selectBudgetsSchema),
@@ -35,6 +38,7 @@ export const create = createRoute({
 	tags,
 	method: "post",
 	path: "/budgets",
+	security: COOKIE_AUTH,
 	request: {
 		body: jsonContent(insertBudgetsSchema, "The budget to create"),
 	},
@@ -58,6 +62,7 @@ export const update = createRoute({
 	tags,
 	method: "put",
 	path: "/budgets",
+	security: COOKIE_AUTH,
 	request: {
 		params: IdUUIDParamsSchema,
 		body: jsonContent(updateBudgetsSchema, "The transaction to update"),
@@ -89,6 +94,7 @@ export const remove = createRoute({
 	tags,
 	method: "delete",
 	path: "/budgets",
+	security: COOKIE_AUTH,
 	request: {
 		params: IdUUIDParamsSchema,
 	},
