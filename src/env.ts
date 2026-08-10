@@ -1,21 +1,23 @@
-import { config } from "dotenv";
-import { expand } from "dotenv-expand";
 import z from "zod";
 
-expand(config());
-
 const envSchema = z.object({
-	PORT: z.coerce.number().positive().default(3000),
 	LOG_LEVEL: z
 		.enum(["fatal", "error", "warn", "info", "debug", "trace"])
 		.default("info"),
 	DATABASE_URL: z.url(),
+	BETTER_AUTH_URL: z.url(),
+	BETTER_AUTH_TRUSTED_ORIGIN: z.url(),
+	BETTER_AUTH_SECRET: z.string().min(1),
 });
 
-const parsed = envSchema.safeParse(process.env);
+export type Environment = z.infer<typeof envSchema>;
 
-if (!parsed.success) {
-	throw new Error(`Invalid error: ${parsed.error.message}`);
+export function parseEnv(data: unknown){
+	const { data: env, error } = envSchema.safeParse(data);
+	
+	if (error) {
+		throw new Error(`Invalid error: ${error.message}`);
+	}
+	
+	return env;
 }
-
-export const env = parsed.data;

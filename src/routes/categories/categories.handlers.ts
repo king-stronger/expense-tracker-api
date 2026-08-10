@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
-import { db } from "@/db/db.js";
+import { createDb } from "@/db/db.js";
 import { categories } from "@/db/schemas.js";
 import { getUser } from "@/lib/helper.js";
 import type { AppRouteHandler } from "@/lib/types.js";
@@ -14,7 +14,8 @@ import type {
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
 	const user = getUser(c);
-
+	
+	const db = createDb(c.env)
 	const results = await db.query.categories.findMany({
 		where: eq(categories.userId, user.id),
 	});
@@ -25,6 +26,7 @@ export const list: AppRouteHandler<ListRoute> = async (c) => {
 export const create: AppRouteHandler<CreateRoute> = async (c) => {
 	const user = getUser(c);
 	const data = c.req.valid("json");
+	const db = createDb(c.env)
 
 	const [category] = await db
 		.insert(categories)
@@ -39,7 +41,8 @@ export const create: AppRouteHandler<CreateRoute> = async (c) => {
 
 export const update: AppRouteHandler<UpdateRoute> = async (c) => {
 	const user = getUser(c);
-
+	
+	const db = createDb(c.env)
 	const data = c.req.valid("json");
 	const { id } = c.req.valid("param");
 	const [category] = await db
@@ -62,7 +65,8 @@ export const update: AppRouteHandler<UpdateRoute> = async (c) => {
 
 export const remove: AppRouteHandler<RemoveRoute> = async (c) => {
 	const user = getUser(c);
-
+	
+	const db = createDb(c.env)
 	const { id } = c.req.valid("param");
 	const result = await db
 		.delete(categories)

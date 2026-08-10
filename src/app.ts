@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth.js";
+import { createAuth } from "@/lib/auth.js";
 import { configureOpenApi } from "@/lib/configure-open-api.js";
 import { createApp } from "@/lib/create-app.js";
 import { authMiddleware, requireAuth } from "@/middlewares/auth.js";
@@ -14,6 +14,8 @@ const routes = [index, categories, transactions, budgets];
 configureOpenApi(app);
 
 app.on(["GET", "POST"], "/api/auth/*", (c) => {
+	const auth = createAuth(c.env);
+
 	return auth.handler(c.req.raw);
 });
 
