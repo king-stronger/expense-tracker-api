@@ -16,3 +16,5 @@ export const createAuth = (env: Environment) => {
 		},
 	});
 };
+
+export type Auth = ReturnType<typeof createAuth>;
