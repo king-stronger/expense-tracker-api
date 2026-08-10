@@ -11,7 +11,6 @@ export function getUser(c: Context<AppBindings>) {
 	return user;
 }
 
-
 export const COOKIE_AUTH = [
 	{
 		cookieAuth: [],

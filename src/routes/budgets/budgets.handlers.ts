@@ -14,8 +14,8 @@ import type {
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
 	const user = getUser(c);
-	
-	const db = createDb(c.env)
+
+	const db = createDb(c.env);
 	const results = await db.query.budgets.findMany({
 		where: eq(budgets.userId, user.id),
 	});
@@ -25,8 +25,8 @@ export const list: AppRouteHandler<ListRoute> = async (c) => {
 export const create: AppRouteHandler<CreateRoute> = async (c) => {
 	const user = getUser(c);
 	const data = c.req.valid("json");
-	
-	const db = createDb(c.env)
+
+	const db = createDb(c.env);
 	const [budget] = await db
 		.insert(budgets)
 		.values({
@@ -40,11 +40,11 @@ export const create: AppRouteHandler<CreateRoute> = async (c) => {
 
 export const update: AppRouteHandler<UpdateRoute> = async (c) => {
 	const user = getUser(c);
-	
+
 	const { id } = c.req.valid("param");
 	const data = c.req.valid("json");
-	
-	const db = createDb(c.env)
+
+	const db = createDb(c.env);
 	const [budget] = await db
 		.update(budgets)
 		.set(data)
@@ -66,8 +66,8 @@ export const update: AppRouteHandler<UpdateRoute> = async (c) => {
 export const remove: AppRouteHandler<RemoveRoute> = async (c) => {
 	const user = getUser(c);
 	const { id } = c.req.valid("param");
-	
-	const db = createDb(c.env)
+
+	const db = createDb(c.env);
 	const result = await db
 		.delete(budgets)
 		.where(and(eq(budgets.id, id), eq(budgets.userId, user.id)));

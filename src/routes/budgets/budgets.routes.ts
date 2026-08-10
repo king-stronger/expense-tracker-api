@@ -14,7 +14,6 @@ import {
 } from "@/db/schemas.js";
 import { COOKIE_AUTH } from "@/lib/helper.js";
 
-
 const tags = ["Budgets"];
 
 export const list = createRoute({

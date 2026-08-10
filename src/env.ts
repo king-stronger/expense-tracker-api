@@ -12,12 +12,12 @@ const envSchema = z.object({
 
 export type Environment = z.infer<typeof envSchema>;
 
-export function parseEnv(data: unknown){
+export function parseEnv(data: unknown) {
 	const { data: env, error } = envSchema.safeParse(data);
-	
+
 	if (error) {
 		throw new Error(`Invalid error: ${error.message}`);
 	}
-	
+
 	return env;
 }

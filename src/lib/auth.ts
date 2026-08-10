@@ -15,4 +15,4 @@ export const createAuth = (env: Environment) => {
 			enabled: true,
 		},
 	});
-}
+};
