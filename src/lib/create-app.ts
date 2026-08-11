@@ -1,3 +1,4 @@
+import { env } from "cloudflare:workers";
 import { structuredLogger } from "@hono/structured-logger";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { requestId } from "hono/request-id";
@@ -5,7 +6,6 @@ import pino from "pino";
 import { notFound, onError, serveEmojiFavicon } from "stoker/middlewares";
 import { defaultHook } from "stoker/openapi";
 import type { AppBindings } from "./types.js";
-import { env } from "cloudflare:workers"
 
 const rootLogger = pino({
 	level: env.LOG_LEVEL,
@@ -25,8 +25,7 @@ export function createApp() {
 	app.use(serveEmojiFavicon(""));
 	app.use(
 		structuredLogger({
-			createLogger: (c) =>
-				rootLogger.child({ requestId: c.var.requestId }),
+			createLogger: (c) => rootLogger.child({ requestId: c.var.requestId }),
 		}),
 	);
 
