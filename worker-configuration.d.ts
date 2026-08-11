@@ -16,22 +16,10 @@ declare namespace Cloudflare {
 }
 interface Env extends __BaseEnv_Env {}
 type StringifyValues<EnvType extends Record<string, unknown>> = {
-	[Binding in keyof EnvType]: EnvType[Binding] extends string
-		? EnvType[Binding]
-		: string;
+	[Binding in keyof EnvType]: EnvType[Binding] extends string ? EnvType[Binding] : string;
 };
 declare namespace NodeJS {
-	interface ProcessEnv
-		extends StringifyValues<
-			Pick<
-				Cloudflare.Env,
-				| "DATABASE_URL"
-				| "BETTER_AUTH_SECRET"
-				| "BETTER_AUTH_URL"
-				| "BETTER_AUTH_TRUSTED_ORIGIN"
-				| "LOG_LEVEL"
-			>
-		> {}
+	interface ProcessEnv extends StringifyValues<Pick<Cloudflare.Env, "DATABASE_URL" | "BETTER_AUTH_SECRET" | "BETTER_AUTH_URL" | "BETTER_AUTH_TRUSTED_ORIGIN" | "LOG_LEVEL">> {}
 }
 
 // Begin runtime types
