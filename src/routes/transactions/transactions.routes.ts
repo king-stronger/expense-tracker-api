@@ -1,4 +1,4 @@
-import { createRoute, z } from "@hono/zod-openapi";
+import { z } from "@hono/zod-openapi";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
 import { jsonContent, jsonContentOneOf } from "stoker/openapi/helpers";
@@ -13,10 +13,11 @@ import {
 	updateTransactionsSchema,
 } from "@/db/schemas.js";
 import { COOKIE_AUTH } from "@/lib/helper.js";
+import { protectedRoute } from "@/middlewares/auth.js";
 
 const tags = ["Transactions"];
 
-export const list = createRoute({
+export const list = protectedRoute({
 	tags,
 	method: "get",
 	path: "/transactions",
@@ -33,7 +34,7 @@ export const list = createRoute({
 	},
 });
 
-export const create = createRoute({
+export const create = protectedRoute({
 	tags,
 	method: "post",
 	path: "/transactions",
@@ -57,7 +58,7 @@ export const create = createRoute({
 	},
 });
 
-export const update = createRoute({
+export const update = protectedRoute({
 	tags,
 	method: "put",
 	path: "/transactions/{id}",
@@ -89,7 +90,7 @@ export const update = createRoute({
 	},
 });
 
-export const remove = createRoute({
+export const remove = protectedRoute({
 	tags,
 	method: "delete",
 	path: "/transactions/{id}",
