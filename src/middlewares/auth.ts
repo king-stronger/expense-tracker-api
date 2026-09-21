@@ -1,8 +1,11 @@
+import { createRoute, type RouteConfig } from "@hono/zod-openapi";
 import type { Context, Next } from "hono";
+
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
-import { createAuth } from "@/lib/auth.js";
-import type { AppBindings } from "@/lib/types.js";
+import { createAuth } from "../lib/auth.js";
+
+import type { AppBindings } from "../lib/types.js";
 
 export const authMiddleware = async (c: Context<AppBindings>, next: Next) => {
 	const auth = createAuth(c.env);
@@ -34,3 +37,32 @@ export const requireAuth = async (c: Context<AppBindings>, next: Next) => {
 
 	await next();
 };
+
+export const protectedRoute = <
+	R extends Omit<RouteConfig, "middleware" | "security">
+>(
+	options: R,
+) =>
+	createRoute({
+		...options,
+		middleware: [authMiddleware, requireAuth] as const,
+		security: [{ CookieAuth: [] }],
+		responses: {
+			[HttpStatusCodes.UNAUTHORIZED]: {
+				description: "Unauthorized",
+			},
+			...options.responses,
+		},
+	});
+
+export const optionalRoute = <
+	R extends Omit<RouteConfig, "middleware">
+>(
+	options: R
+) =>
+	createRoute({
+		...options,
+		middleware: [authMiddleware] as const,
+		security: [{ CookieAuth: [] }],
+		responses: options.responses,
+	});
