@@ -9,7 +9,7 @@ export function configureOpenApi(app: AppOpenApi) {
 		name: "better-auth.session_token",
 	});
 
-	app.doc("/doc", {
+	app.doc("/docs", {
 		openapi: "3.1.0",
 		info: {
 			version: packageJson.version,
@@ -20,7 +20,10 @@ export function configureOpenApi(app: AppOpenApi) {
 	app.get(
 		"/scalar",
 		Scalar({
-			url: "/doc",
+			sources: [
+				{ url: "/docs", title: "API" },
+				{ url: "/api/auth/open-api/generate-schema", title: "AUTH" }
+			],
 			theme: "kepler",
 			layout: "modern",
 			defaultHttpClient: {
