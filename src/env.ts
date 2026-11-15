@@ -15,6 +15,8 @@ export const envSchema = z.object({
 		.string()
 		.default("Expense Tracker <onboarding@resend.dev>"),
 	ENABLE_API_DOCS: z.enum(["true", "false"]).default("false"),
+	/** Optional override for Better Auth rate limit (tests). */
+	AUTH_RATE_LIMIT_MAX: z.string().regex(/^\d+$/).optional(),
 });
 
 export type Environment = z.infer<typeof envSchema>;
