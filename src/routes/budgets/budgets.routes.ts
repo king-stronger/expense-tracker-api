@@ -17,11 +17,23 @@ import { protectedRoute } from "@/middlewares/auth.js";
 
 const tags = ["Budgets"];
 
+const listQuerySchema = z.object({
+	month: z.coerce.number().int().min(1).max(12).optional().openapi({
+		param: { name: "month", in: "query" },
+	}),
+	year: z.coerce.number().int().min(2000).max(2100).optional().openapi({
+		param: { name: "year", in: "query" },
+	}),
+});
+
 export const list = protectedRoute({
 	tags,
 	method: "get",
 	path: "/budgets",
 	security: COOKIE_AUTH,
+	request: {
+		query: listQuerySchema,
+	},
 	responses: {
 		[HttpStatusCodes.OK]: jsonContent(
 			z.array(selectBudgetsSchema),
@@ -43,9 +55,13 @@ export const create = protectedRoute({
 		body: jsonContent(insertBudgetsSchema, "The budget to create"),
 	},
 	responses: {
-		[HttpStatusCodes.OK]: jsonContent(
+		[HttpStatusCodes.CREATED]: jsonContent(
 			selectBudgetsSchema,
 			"The budget has been created",
+		),
+		[HttpStatusCodes.NOT_FOUND]: jsonContent(
+			createMessageObjectSchema(HttpStatusPhrases.NOT_FOUND),
+			"Category not found",
 		),
 		[HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
 			createErrorSchema(insertBudgetsSchema),
@@ -61,11 +77,11 @@ export const create = protectedRoute({
 export const update = protectedRoute({
 	tags,
 	method: "put",
-	path: "/budgets",
+	path: "/budgets/{id}",
 	security: COOKIE_AUTH,
 	request: {
 		params: IdUUIDParamsSchema,
-		body: jsonContent(updateBudgetsSchema, "The transaction to update"),
+		body: jsonContent(updateBudgetsSchema, "The budget to update"),
 	},
 	responses: {
 		[HttpStatusCodes.OK]: jsonContent(
@@ -93,7 +109,7 @@ export const update = protectedRoute({
 export const remove = protectedRoute({
 	tags,
 	method: "delete",
-	path: "/budgets",
+	path: "/budgets/{id}",
 	security: COOKIE_AUTH,
 	request: {
 		params: IdUUIDParamsSchema,

@@ -17,11 +17,11 @@ import {
 	updateCategorySchema,
 } from "@/db/schemas.js";
 import { COOKIE_AUTH } from "@/lib/helper.js";
-import { protectedRoute, optionalRoute } from "@/middlewares/auth.js";
+import { protectedRoute } from "@/middlewares/auth.js";
 
 const tags = ["Categories"];
 
-export const list = optionalRoute({
+export const list = protectedRoute({
 	tags,
 	method: "get",
 	path: "/categories",
@@ -47,7 +47,7 @@ export const create = protectedRoute({
 		body: jsonContentRequired(insertCategorySchema, "The category to create"),
 	},
 	responses: {
-		[HttpStatusCodes.OK]: jsonContent(
+		[HttpStatusCodes.CREATED]: jsonContent(
 			selectCategorySchema,
 			"The category created",
 		),

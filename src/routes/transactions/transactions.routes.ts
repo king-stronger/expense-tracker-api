@@ -17,11 +17,29 @@ import { protectedRoute } from "@/middlewares/auth.js";
 
 const tags = ["Transactions"];
 
+const listQuerySchema = z.object({
+	month: z.coerce.number().int().min(1).max(12).optional().openapi({
+		param: { name: "month", in: "query" },
+	}),
+	year: z.coerce.number().int().min(2000).max(2100).optional().openapi({
+		param: { name: "year", in: "query" },
+	}),
+	categoryId: z.uuid().optional().openapi({
+		param: { name: "categoryId", in: "query" },
+	}),
+	type: z.enum(["income", "expense"]).optional().openapi({
+		param: { name: "type", in: "query" },
+	}),
+});
+
 export const list = protectedRoute({
 	tags,
 	method: "get",
 	path: "/transactions",
 	security: COOKIE_AUTH,
+	request: {
+		query: listQuerySchema,
+	},
 	responses: {
 		[HttpStatusCodes.OK]: jsonContent(
 			z.array(selectTransactionsSchema),
@@ -43,13 +61,17 @@ export const create = protectedRoute({
 		body: jsonContent(insertTransactionsSchema, "The transaction to insert"),
 	},
 	responses: {
-		[HttpStatusCodes.OK]: jsonContent(
+		[HttpStatusCodes.CREATED]: jsonContent(
 			selectTransactionsSchema,
 			"The transaction created",
 		),
+		[HttpStatusCodes.NOT_FOUND]: jsonContent(
+			createMessageObjectSchema(HttpStatusPhrases.NOT_FOUND),
+			"Category not found",
+		),
 		[HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
 			createErrorSchema(insertTransactionsSchema),
-			"The transaction has been created",
+			"Validation(s) error(s)",
 		),
 		[HttpStatusCodes.UNAUTHORIZED]: jsonContent(
 			createMessageObjectSchema(HttpStatusPhrases.UNAUTHORIZED),

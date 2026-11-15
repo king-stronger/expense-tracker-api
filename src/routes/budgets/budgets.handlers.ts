@@ -3,7 +3,7 @@ import * as HttpStatusCodes from "stoker/http-status-codes";
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
 import { createDb } from "@/db/db.js";
 import { budgets } from "@/db/schemas.js";
-import { getUser } from "@/lib/helper.js";
+import { assertCategoryOwnedByUser, getUser } from "@/lib/helper.js";
 import type { AppRouteHandler } from "@/lib/types.js";
 import type {
 	CreateRoute,
@@ -14,10 +14,18 @@ import type {
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
 	const user = getUser(c);
+	const query = c.req.valid("query");
+	const now = new Date();
+	const month = query.month ?? now.getUTCMonth() + 1;
+	const year = query.year ?? now.getUTCFullYear();
 
 	const db = createDb(c.env);
 	const results = await db.query.budgets.findMany({
-		where: eq(budgets.userId, user.id),
+		where: and(
+			eq(budgets.userId, user.id),
+			eq(budgets.month, month),
+			eq(budgets.year, year),
+		),
 	});
 	return c.json(results, HttpStatusCodes.OK);
 };
@@ -27,6 +35,21 @@ export const create: AppRouteHandler<CreateRoute> = async (c) => {
 	const data = c.req.valid("json");
 
 	const db = createDb(c.env);
+	const ownsCategory = await assertCategoryOwnedByUser(
+		db,
+		data.categoryId,
+		user.id,
+	);
+
+	if (!ownsCategory) {
+		return c.json(
+			{
+				message: HttpStatusPhrases.NOT_FOUND,
+			},
+			HttpStatusCodes.NOT_FOUND,
+		);
+	}
+
 	const [budget] = await db
 		.insert(budgets)
 		.values({
@@ -35,7 +58,7 @@ export const create: AppRouteHandler<CreateRoute> = async (c) => {
 		})
 		.returning();
 
-	return c.json(budget, HttpStatusCodes.OK);
+	return c.json(budget, HttpStatusCodes.CREATED);
 };
 
 export const update: AppRouteHandler<UpdateRoute> = async (c) => {
@@ -45,6 +68,24 @@ export const update: AppRouteHandler<UpdateRoute> = async (c) => {
 	const data = c.req.valid("json");
 
 	const db = createDb(c.env);
+
+	if (data.categoryId) {
+		const ownsCategory = await assertCategoryOwnedByUser(
+			db,
+			data.categoryId,
+			user.id,
+		);
+
+		if (!ownsCategory) {
+			return c.json(
+				{
+					message: HttpStatusPhrases.NOT_FOUND,
+				},
+				HttpStatusCodes.NOT_FOUND,
+			);
+		}
+	}
+
 	const [budget] = await db
 		.update(budgets)
 		.set(data)

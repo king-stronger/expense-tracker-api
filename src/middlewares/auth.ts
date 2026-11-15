@@ -54,15 +54,3 @@ export const protectedRoute = <
 			...options.responses,
 		},
 	});
-
-export const optionalRoute = <
-	R extends Omit<RouteConfig, "middleware">
->(
-	options: R
-) =>
-	createRoute({
-		...options,
-		middleware: [authMiddleware] as const,
-		security: [{ CookieAuth: [] }],
-		responses: options.responses,
-	});

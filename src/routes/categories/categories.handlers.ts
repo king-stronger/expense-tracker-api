@@ -36,7 +36,7 @@ export const create: AppRouteHandler<CreateRoute> = async (c) => {
 		})
 		.returning();
 
-	return c.json(category, HttpStatusCodes.OK);
+	return c.json(category, HttpStatusCodes.CREATED);
 };
 
 export const update: AppRouteHandler<UpdateRoute> = async (c) => {
